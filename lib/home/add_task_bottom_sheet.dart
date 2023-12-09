@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp_2/home/settings_tab.dart';
+import 'package:todoapp_2/home/tasks_tab.dart';
 
-class AddTaskBottomSheet extends StatelessWidget {
-  const AddTaskBottomSheet({super.key});
+class AddTaskBottomSheet extends StatefulWidget {
+  @override
+  State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
+}
+
+class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
+ String title='';
+
+ String description='';
+ DateTime selectedDate= DateTime.now();
+ var formkey= GlobalKey<FormState>;
 
   @override
   Widget build(BuildContext context) {
@@ -14,15 +25,23 @@ class AddTaskBottomSheet extends StatelessWidget {
           style: Theme.of(context).primaryTextTheme.headline2,
           textAlign: TextAlign.center,),
           Form(child: Column(
-
             children: [
               TextFormField( decoration: InputDecoration(
                 hintText: 'enter task title'
-              ),),
+              ),
+              onChanged: (text){
+                text= title;
+              },
+
+              ),
               SizedBox(height: 10,),
               TextFormField( decoration: InputDecoration(
                   hintText: 'enter task description'
-              ),maxLines: 4,)
+              ),maxLines: 4,
+              onChanged: (text){
+                text= description;
+              },
+              )
             ],
           )),
           SizedBox(height: 10,),
@@ -31,8 +50,9 @@ class AddTaskBottomSheet extends StatelessWidget {
           SizedBox(height: 10,),
           InkWell(onTap: (){
             //show calender
+            chooseDate();
           },
-            child: Text('14/10/2023',
+            child: Text('${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
               style: Theme.of(context).primaryTextTheme.headline2,
               textAlign: TextAlign.center,),
           ),
@@ -42,4 +62,20 @@ class AddTaskBottomSheet extends StatelessWidget {
       ),
     );
   }
+
+  void chooseDate() async {
+    var chosenDate= await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime.now(),
+        lastDate: DateTime.now().add(Duration(days: 356))
+    );
+    if(chosenDate != null){
+      selectedDate = chosenDate;
+      setState(() {
+
+      });
+    }
+  }
 }
+
